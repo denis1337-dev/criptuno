@@ -11,7 +11,21 @@ import {
 import { getTelegramInitData } from "./telegram";
 
 const API_URL = "";
-let authToken = "";
+const TOKEN_KEY = "authToken";
+
+const getStoredToken = (): string => {
+  return localStorage.getItem(TOKEN_KEY) ?? "";
+};
+
+const setStoredToken = (token: string): void => {
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+};
+
+let authToken = getStoredToken();
 
 const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
   const response = await fetch(`${API_URL}${path}`, {
@@ -23,6 +37,10 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
     }
   });
   if (!response.ok) {
+    if (response.status === 401) {
+      authToken = "";
+      setStoredToken("");
+    }
     throw new Error(`Request failed: ${response.status}`);
   }
   return (await response.json()) as T;
@@ -31,14 +49,19 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
 export const authWithTelegram = async (): Promise<void> => {
   const initData = getTelegramInitData();
   if (!initData) {
-    authToken = "";
+    authToken = getStoredToken();
     return;
   }
-  const data = await request<{ token: string }>("/auth/telegram", {
-    method: "POST",
-    body: JSON.stringify({ initData })
-  });
-  authToken = data.token;
+  try {
+    const data = await request<{ token: string }>("/auth/telegram", {
+      method: "POST",
+      body: JSON.stringify({ initData })
+    });
+    authToken = data.token;
+    setStoredToken(data.token);
+  } catch {
+    authToken = getStoredToken();
+  }
 };
 
 export const getCourses = () => request<Course[]>("/courses");

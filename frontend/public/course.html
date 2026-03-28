@@ -250,12 +250,17 @@
 
         try {
           const headers = await getAuthHeader();
+          console.log('API_URL:', API_URL);
+          console.log('Fetching course:', courseId);
           
           const [coursesRes, modulesRes, progressRes] = await Promise.all([
-            fetch(API_URL + "/courses"),
-            fetch(API_URL + "/courses/" + courseId + "/modules"),
+            fetch(API_URL + "/courses").catch(e => { console.error('courses error:', e); throw e; }),
+            fetch(API_URL + "/courses/" + courseId + "/modules").catch(e => { console.error('modules error:', e); throw e; }),
             fetch(API_URL + "/courses/" + courseId + "/progress", { headers }).catch(() => ({ json: () => null }))
           ]);
+
+          console.log('coursesRes:', coursesRes.status);
+          console.log('modulesRes:', modulesRes.status);
 
           const courses = await coursesRes.json();
           const modules = await modulesRes.json();
@@ -330,8 +335,8 @@
 
         } catch (error) {
           console.error('Error loading course:', error);
-          titleEl.textContent = "Ошибка загрузки";
-          modulesEl.innerHTML = "<p style='color:var(--error);'>Не удалось загрузить курс.</p>";
+          titleEl.textContent = "Ошибка загрузки: " + error.message;
+          modulesEl.innerHTML = "<p style='color:var(--error);'>Не удалось загрузить курс. Проверьте консоль.</p>";
         }
       }
 

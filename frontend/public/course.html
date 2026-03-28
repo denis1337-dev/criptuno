@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Курс</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      .course-header {
+        margin-bottom: 24px;
+      }
+      .course-modules {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .module-card {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        padding: 24px;
+        border: 1px solid var(--border);
+        transition: all 0.3s;
+      }
+      .module-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-2px);
+      }
+      .module-card h2 {
+        margin: 0 0 16px 0;
+        font-size: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .module-card h3 {
+        margin: 20px 0 10px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary-light);
+      }
+      .module-card p {
+        margin: 10px 0;
+        line-height: 1.7;
+        color: var(--text-secondary);
+      }
+      .module-card ul, .module-card ol {
+        margin: 10px 0;
+        padding-left: 24px;
+        color: var(--text-secondary);
+      }
+      .module-card li {
+        margin: 8px 0;
+        line-height: 1.6;
+      }
+      .module-card pre {
+        background: var(--bg);
+        padding: 16px;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--primary-light);
+        border: 1px solid var(--border);
+      }
+      .module-card code {
+        background: var(--bg);
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: var(--accent);
+        border: 1px solid var(--border);
+      }
+      .module-card blockquote {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        border-left: 4px solid var(--primary);
+        margin: 16px 0;
+        padding: 16px 20px;
+        border-radius: 0 12px 12px 0;
+        color: var(--text);
+      }
+      .module-card table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0;
+        font-size: 14px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+      .module-card th, .module-card td {
+        padding: 12px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      .module-card th {
+        background: var(--bg);
+        font-weight: 600;
+        color: var(--primary-light);
+      }
+      .module-card td {
+        color: var(--text-secondary);
+      }
+      .module-card tr:last-child td {
+        border-bottom: none;
+      }
+      .module-card a {
+        color: var(--primary-light) !important;
+        text-decoration: underline !important;
+        text-decoration-color: rgba(129, 140, 248, 0.5);
+        text-underline-offset: 2px;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+      }
+      .module-card a:hover {
+        color: var(--primary) !important;
+        text-decoration-color: var(--primary) !important;
+      }
+      .progress-bar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+      .progress-dot {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 50%;
+        background: var(--bg-card);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .progress-dot:hover {
+        border-color: var(--primary);
+        transform: scale(1.1);
+      }
+      .progress-dot.active {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border-color: var(--primary);
+        color: white;
+      }
+      .progress-dot.completed {
+        background: var(--success);
+        border-color: var(--success);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <div class="course-header">
+        <a href="/" class="back-link" style="display:inline-flex;align-items:center;gap:8px;color:var(--primary-light);text-decoration:none;font-weight:600;margin-bottom:16px;">
+          ← На главную
+        </a>
+        <h1 style="font-size:28px;font-weight:800;margin:0;background:linear-gradient(135deg,var(--text),var(--primary-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="course-title">Загрузка...</h1>
+      </div>
+      
+      <div class="progress-bar" id="progress-bar"></div>
+      
+      <section class="course-modules" id="course-modules">
+        <p style="color:var(--text-muted);text-align:center;padding:60px 20px;">Загрузка материалов...</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="/" class="nav-item active">
+        <span class="nav-icon">📚</span>
+        <span>Курсы</span>
+      </a>
+      <a href="/" class="nav-item">
+        <span class="nav-icon">🎮</span>
+        <span>Игры</span>
+      </a>
+      <a href="/" class="nav-item">
+        <span class="nav-icon">👤</span>
+        <span>Профиль</span>
+      </a>
+    </nav>
+
+    <script>
+      const API_URL = "";
+      let completedModules = new Set();
+      
+      async function loadCourse() {
+        const params = new URLSearchParams(window.location.search);
+        const courseId = params.get("course");
+        const titleEl = document.getElementById("course-title");
+        const modulesEl = document.getElementById("course-modules");
+        const progressBar = document.getElementById("progress-bar");
+        
+        if (!courseId) {
+          titleEl.textContent = "Курс не найден";
+          return;
+        }
+
+        try {
+          const [coursesRes, modulesRes] = await Promise.all([
+            fetch(API_URL + "/courses"),
+            fetch(API_URL + "/courses/" + courseId + "/modules")
+          ]);
+
+          const courses = await coursesRes.json();
+          const modules = await modulesRes.json();
+          
+          const course = courses.find(c => c.id === parseInt(courseId));
+          
+          if (!course) {
+            titleEl.textContent = "Курс не найден";
+            return;
+          }
+
+          titleEl.textContent = course.title;
+          
+          progressBar.innerHTML = modules.map((_, i) => 
+            '<div class="progress-dot' + (i === 0 ? ' active' : '') + '" data-index="' + i + '" title="Модуль ' + (i + 1) + '">' + (i + 1) + '</div>'
+          ).join('');
+
+          const dots = progressBar.querySelectorAll('.progress-dot');
+          dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+              const index = parseInt(dot.dataset.index);
+              const target = modulesEl.querySelectorAll('.module-card')[index];
+              if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            });
+          });
+
+          modulesEl.innerHTML = modules.map((module, index) => 
+            '<div class="module-card" id="module-' + index + '">' + module.content + '</div>'
+          ).join('');
+
+          const cards = modulesEl.querySelectorAll('.module-card');
+          
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const index = Array.from(cards).indexOf(entry.target);
+                dots.forEach((d, i) => {
+                  d.classList.remove('active', 'completed');
+                  if (i < index) {
+                    d.classList.add('completed');
+                    d.innerHTML = '✓';
+                  } else if (i === index) {
+                    d.classList.add('active');
+                    d.innerHTML = i + 1;
+                  } else {
+                    d.innerHTML = i + 1;
+                  }
+                });
+              }
+            });
+          }, { threshold: 0.3 });
+
+          cards.forEach(card => observer.observe(card));
+
+
+
+        } catch (error) {
+          console.error('Error loading course:', error);
+          titleEl.textContent = "Ошибка загрузки";
+          modulesEl.innerHTML = "<p style='color:var(--error);'>Не удалось загрузить курс.</p>";
+        }
+      }
+
+      document.addEventListener('click', function(e) {
+        var target = e.target || e.srcElement;
+        var link = target.closest ? target.closest('a') : null;
+        if (link) {
+          var href = link.getAttribute('href');
+          if (href && (href.indexOf('http') === 0 || href.indexOf('https') === 0)) {
+            e.preventDefault();
+            window.open(href, '_blank', 'noopener,noreferrer');
+          }
+        }
+      });
+
+      loadCourse();
+
+      if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+        window.Telegram.WebApp.disableClosingConfirmation();
+      }
+    </script>
+  </body>
+</html>

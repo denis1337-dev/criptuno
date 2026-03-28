@@ -1,6 +1,7 @@
 type TelegramWebApp = {
   initData?: string;
   ready?: () => void;
+  expand?: () => void;
 };
 
 type TelegramWindow = Window & {
@@ -11,6 +12,13 @@ type TelegramWindow = Window & {
 
 export const getTelegramInitData = (): string => {
   const webApp = (window as TelegramWindow).Telegram?.WebApp;
-  webApp?.ready?.();
+  if (webApp) {
+    webApp.ready?.();
+    webApp.expand?.();
+  }
   return webApp?.initData ?? "";
+};
+
+export const isTelegramWebApp = (): boolean => {
+  return !!(window as TelegramWindow).Telegram?.WebApp;
 };

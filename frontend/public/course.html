@@ -249,21 +249,25 @@
 
         try {
           const headers = await getAuthHeader();
-          console.log('API_URL:', API_URL);
-          console.log('Fetching course:', courseId);
+          console.log('API_URL:', API_URL, 'courseId:', courseId);
           
-          const [coursesRes, modulesRes, progressRes] = await Promise.all([
-            fetch(API_URL + "/courses").catch(e => { console.error('courses error:', e); throw e; }),
-            fetch(API_URL + "/courses/" + courseId + "/modules").catch(e => { console.error('modules error:', e); throw e; }),
-            fetch(API_URL + "/courses/" + courseId + "/progress", { headers }).catch(() => ({ json: () => null }))
-          ]);
-
-          console.log('coursesRes:', coursesRes.status);
-          console.log('modulesRes:', modulesRes.status);
+          const coursesRes = await fetch(API_URL + "/courses");
+          const modulesRes = await fetch(API_URL + "/courses/" + courseId + "/modules");
+          
+          console.log('coursesRes status:', coursesRes.status);
+          console.log('modulesRes status:', modulesRes.status);
+          
+          if (!coursesRes.ok || !modulesRes.ok) {
+            titleEl.textContent = "Ошибка API: courses=" + coursesRes.status + ", modules=" + modulesRes.status;
+            modulesEl.innerHTML = "<p>Проверьте консоль для деталей</p>";
+            return;
+          }
 
           const courses = await coursesRes.json();
           const modules = await modulesRes.json();
-          const progress = progressRes.json ? await progressRes.json() : null;
+          
+          console.log('Courses loaded:', courses.length);
+          console.log('Modules loaded:', modules.length);
           
           const course = courses.find(c => c.id === parseInt(courseId));
           

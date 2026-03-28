@@ -1,7 +1,9 @@
 {
+  "version": 2,
   "routes": [
+    { "handle": "filesystem" },
     { "src": "/courses", "dest": "https://criptuno.onrender.com/courses" },
-    { "src": "/courses/(?<slug>.*)", "dest": "https://criptuno.onrender.com/courses/$slug" },
+    { "src": "/courses/(.*)", "dest": "https://criptuno.onrender.com/courses/$1" },
     { "src": "/auth/telegram", "dest": "https://criptuno.onrender.com/auth/telegram" },
     { "src": "/games", "dest": "https://criptuno.onrender.com/games" },
     { "src": "/profile/me", "dest": "https://criptuno.onrender.com/profile/me" },

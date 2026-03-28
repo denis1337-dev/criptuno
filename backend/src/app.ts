@@ -20,12 +20,10 @@ declare module "fastify" {
 export const buildApp = () => {
   const app = Fastify({ logger: true });
 
-  const isProduction = process.env.NODE_ENV === "production";
-  const corsOrigin = isProduction 
-    ? ["https://criptuno.vercel.app", "https://criptuno-git-master.vercel.app", "https://criptuno-git-курсы.vercel.app"]
-    : config.frontendOrigin;
-  
-  app.register(cors, { origin: corsOrigin, credentials: true });
+  app.register(cors, { 
+    origin: true,
+    credentials: true
+  });
   app.register(rateLimit, { max: 100, timeWindow: "1 minute" });
   app.register(jwt, { secret: config.jwtSecret });
 

@@ -1,5 +1,11 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://criptuno.onrender.com/$1" }
+    { "source": "/courses", "destination": "https://criptuno.onrender.com/courses" },
+    { "source": "/auth/:path*", "destination": "https://criptuno.onrender.com/auth/:path*" },
+    { "source": "/games", "destination": "https://criptuno.onrender.com/games" },
+    { "source": "/profile/:path*", "destination": "https://criptuno.onrender.com/profile/:path*" },
+    { "source": "/quiz-tests/:path*", "destination": "https://criptuno.onrender.com/quiz-tests/:path*" },
+    { "source": "/puzzle-levels/:path*", "destination": "https://criptuno.onrender.com/puzzle-levels/:path*" },
+    { "source": "/puzzle-collected", "destination": "https://criptuno.onrender.com/puzzle-collected" }
   ]
 }

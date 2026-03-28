@@ -96,6 +96,27 @@ export const migrate = async (): Promise<void> => {
       completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       UNIQUE (session_key, level_id)
     );
+
+    CREATE TABLE IF NOT EXISTS user_course_progress (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      course_id INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+      completed_modules INT NOT NULL DEFAULT 0,
+      total_modules INT NOT NULL DEFAULT 0,
+      is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+      started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      completed_at TIMESTAMPTZ,
+      UNIQUE (user_id, course_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS user_module_progress (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      module_id INT NOT NULL REFERENCES course_modules(id) ON DELETE CASCADE,
+      is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+      completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (user_id, module_id)
+    );
   `);
 
   await pool.query(`DELETE FROM course_modules`);

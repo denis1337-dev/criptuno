@@ -5,10 +5,17 @@ import Fastify from "fastify";
 import { config } from "./config.js";
 import { authRoutes } from "./routes/auth.js";
 import { coursesRoutes } from "./routes/courses.js";
+import { courseProgressRoutes } from "./routes/course-progress.js";
 import { gamesRoutes } from "./routes/games.js";
 import { profileRoutes } from "./routes/profile.js";
 import { puzzleRoutes } from "./routes/puzzle.js";
 import { quizTestsRoutes } from "./routes/quiz-tests.js";
+
+declare module "fastify" {
+  interface FastifyRequest {
+    user: { userId: number; telegramId: number };
+  }
+}
 
 export const buildApp = () => {
   const app = Fastify({ logger: true });
@@ -30,9 +37,24 @@ export const buildApp = () => {
     }
   });
 
+  app.addHook("onRequest", async (request, reply) => {
+    if (request.url.startsWith("/courses/") && request.url.includes("/progress")) {
+      try {
+        const authHeader = request.headers.authorization;
+        if (authHeader?.startsWith("Bearer ")) {
+          const decoded = await request.jwtVerify();
+          request.user = decoded as { userId: number; telegramId: number };
+        }
+      } catch {
+        // Continue without auth for course progress
+      }
+    }
+  });
+
   app.get("/health", async () => ({ ok: true }));
   app.register(authRoutes);
   app.register(coursesRoutes);
+  app.register(courseProgressRoutes);
   app.register(gamesRoutes);
   app.register(quizTestsRoutes);
   app.register(puzzleRoutes);

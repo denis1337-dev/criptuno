@@ -120,7 +120,9 @@ export const migrate = async (): Promise<void> => {
   `);
 
   await pool.query(`DELETE FROM course_modules`);
+  console.log('Deleted old course_modules');
   await pool.query(`DELETE FROM courses`);
+  console.log('Deleted old courses');
   await pool.query(`DELETE FROM quiz_questions`);
   await pool.query(`DELETE FROM quiz_tests`);
   await pool.query(`DELETE FROM puzzle_levels`);
@@ -228,8 +230,138 @@ export const migrate = async (): Promise<void> => {
 
 async function seedCourseModules() {
   const courses = await pool.query(`SELECT id, title FROM courses ORDER BY order_index`);
+  console.log('Seeding modules for courses:', courses.rows.map(c => c.title));
   
   const courseData = [
+    {
+      title: 'Что такое блокчейн',
+      modules: [
+        {
+          title: '📜 История блокчейна',
+          content: `<h2>История блокчейна</h2>
+<p>Блокчейн был впервые описан в 1991 году учеными <strong>Стюартом Хабером и У. Скоттом Шторнеттом</strong>, но настоящая революция произошла в 2008 году, когда <strong>Сатоши Накамото</strong> представил Bitcoin — первую децентрализованную криптовалюту.</p>
+
+<h3>Ключевые даты:</h3>
+<ul>
+<li><strong>1991</strong> — Концепция цепочки блоков</li>
+<li><strong>2008</strong> — White Paper Bitcoin</li>
+<li><strong>2009</strong> — Запуск сети Bitcoin</li>
+<li><strong>2015</strong> — Ethereum с умными контрактами</li>
+</ul>
+
+<h3>Зачем это нужно?</h3>
+<p>До появления блокчейна все финансовые системы работали через <strong>централизованных посредников</strong>: банки, платёжные системы. Блокчейн позволяет совершать транзакции <strong>напрямую</strong>, без посредников.</p>
+
+<blockquote>💡 Блокчейн — это как цифровой дневник, который нельзя подделать и который хранится одновременно у миллионов людей!</blockquote>`
+        },
+        {
+          title: '🏛️ Децентрализация',
+          content: `<h2>Что такое децентрализация?</h2>
+<p><strong>Децентрализация</strong> — это когда нет одного главного. Вместо одного сервера/банка данные хранятся на тысячах компьютеров по всему миру.</p>
+
+<h3>Преимущества децентрализации:</h3>
+<ol>
+<li><strong>Устойчивость</strong> — сеть нельзя выключить</li>
+<li><strong>Прозрачность</strong> — все транзакции публичны</li>
+<li><strong>Невозможность подделки</strong> — изменение данных практически невозможно</li>
+</ol>`
+        },
+        {
+          title: '🏦 Блокчейн vs Банки',
+          content: `<h2>Блокчейн и традиционные финансы</h2>
+<p>Давайте сравним, как работают переводы в банке и в блокчейне:</p>
+
+<h3>Банковский перевод:</h3>
+<p>⏱️ <strong>Время:</strong> 1-5 рабочих дней<br>
+💰 <strong>Комиссия:</strong> 1-5% + фиксированная</p>
+
+<h3>Перевод в блокчейне:</h3>
+<p>⏱️ <strong>Время:</strong> 10 минут — 15 минут<br>
+💰 <strong>Комиссия:</strong> $0.5 — $50 (зависит от загрузки сети)</p>`
+        }
+      ]
+    },
+    {
+      title: 'Криптовалюты: Bitcoin и Ethereum',
+      modules: [
+        {
+          title: '₿ Bitcoin — цифровое золото',
+          content: `<h2>Bitcoin (BTC)</h2>
+<p><strong>Bitcoin</strong> — первая и самая известная криптовалюта, созданная в 2009 году загадочным Сатоши Накамото.</p>
+
+<h3>Основные характеристики:</h3>
+<ul>
+<li><strong>Максимальное предложение:</strong> 21,000,000 BTC</li>
+<li><strong>Время блока:</strong> ~10 минут</li>
+<li><strong>Алгоритм:</strong> SHA-256</li>
+</ul>`
+        },
+        {
+          title: '♦️ Ethereum — компьютер будущего',
+          content: `<h2>Ethereum (ETH)</h2>
+<p><strong>Ethereum</strong> — вторая по капитализации криптовалюта, созданная Виталиком Бутериным в 2015 году.</p>
+
+<h3>Отличия от Bitcoin:</h3>
+<ul>
+<li>Поддержка смарт-контрактов</li>
+<li>Быстрее транзакции (12-15 секунд)</li>
+<li>EVM — Ethereum Virtual Machine</li>
+</ul>`
+        },
+        {
+          title: '💰 Как хранить криптовалюту',
+          content: `<h2>Криптовалютные кошельки</h2>
+<p>Для хранения криптовалюты используются кошельки. Они бывают:</p>
+
+<h3>Типы кошельков:</h3>
+<ul>
+<li><strong>Hot wallets</strong> — онлайн, подключены к интернету</li>
+<li><strong>Cold wallets</strong> — аппаратные, офлайн хранение</li>
+<li><strong>Paper wallets</strong> — бумажные, приватные ключи на бумаге</li>
+</ul>`
+        }
+      ]
+    }
+  ];
+
+  for (const course of courses.rows) {
+    console.log('Processing course:', course.title, 'id:', course.id);
+    
+    // Find matching course data by checking if title contains first word
+    const firstWord = course.title.split(' ')[0];
+    const courseDataItem = courseData.find(c => course.title.includes(c.title.split(' ')[0]));
+    
+    if (!courseDataItem) {
+      console.log('No modules found for course:', course.title);
+      // Add default modules
+      await pool.query(
+        `INSERT INTO course_modules (course_id, title, content, order_index) VALUES ($1, $2, $3, $4)`,
+        [course.id, '📖 Модуль 1', '<h2>Добро пожаловать!</h2><p>Контент этого модуля скоро появится.</p>', 1]
+      );
+      await pool.query(
+        `INSERT INTO course_modules (course_id, title, content, order_index) VALUES ($1, $2, $3, $4)`,
+        [course.id, '📖 Модуль 2', '<h2>Продолжение следует...</h2><p>Контент этого модуля скоро появится.</p>', 2]
+      );
+      await pool.query(
+        `INSERT INTO course_modules (course_id, title, content, order_index) VALUES ($1, $2, $3, $4)`,
+        [course.id, '📖 Модуль 3', '<h2>Финал!</h2><p>Контент этого модуля скоро появится.</p>', 3]
+      );
+      console.log('Added default modules to course:', course.title);
+      continue;
+    }
+
+    for (let i = 0; i < courseDataItem.modules.length; i++) {
+      const mod = courseDataItem.modules[i];
+      await pool.query(
+        `INSERT INTO course_modules (course_id, title, content, order_index) VALUES ($1, $2, $3, $4)`,
+        [course.id, mod.title, mod.content, i + 1]
+      );
+      console.log('Added module:', mod.title, 'to course', course.title);
+    }
+  }
+  
+  console.log('Course modules seeding complete!');
+}
     {
       title: 'Что такое блокчейн',
       modules: [

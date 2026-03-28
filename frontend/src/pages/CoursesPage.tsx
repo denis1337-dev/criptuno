@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../store";
 
 const courseIcons: Record<string, string> = {
@@ -14,6 +15,7 @@ const courseIcons: Record<string, string> = {
 };
 
 export const CoursesPage = () => {
+  const { t } = useTranslation();
   const courses = useAppStore((s) => s.courses);
   const [showPaywall, setShowPaywall] = useState(false);
   const [isUnlocked] = useState(() => {
@@ -46,7 +48,7 @@ export const CoursesPage = () => {
         </div>
         <div className="course-info">
           <h3 style={{ color: 'var(--text)', margin: '0 0 4px', fontSize: '17px', fontWeight: 600 }}>{course.title}</h3>
-          <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-muted)' }}>{isLocked ? '💎 Премиум курс' : '3 модуля • Интерактивные уроки'}</p>
+          <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-muted)' }}>{isLocked ? t('courses.premiumCourse') : t('courses.modules')}</p>
         </div>
         <span className="course-arrow">{isLocked ? '🔒' : '→'}</span>
       </div>
@@ -57,8 +59,8 @@ export const CoursesPage = () => {
     return (
       <section className="screen">
         <div className="screen-header">
-          <h1>📚 Премиум курсы</h1>
-          <p>Разблокируйте весь контент</p>
+          <h1>📚 {t('premium.title')}</h1>
+          <p>{t('premium.subtitle')}</p>
         </div>
 
         <div className="card" style={{ 
@@ -67,9 +69,9 @@ export const CoursesPage = () => {
           background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1))'
         }}>
           <div style={{ fontSize: '80px', marginBottom: '20px' }}>💎</div>
-          <h2 style={{ margin: '0 0 12px', fontSize: '24px' }}>Премиум подписка</h2>
+          <h2 style={{ margin: '0 0 12px', fontSize: '24px' }}>{t('premium.unlock')}</h2>
           <p style={{ color: 'var(--text-secondary)', margin: '0 0 32px', lineHeight: 1.6 }}>
-            Получите доступ ко всем курсам среднего и продвинутого уровня
+            {t('premium.description')}
           </p>
           
           <div style={{ 
@@ -80,10 +82,10 @@ export const CoursesPage = () => {
             border: '1px solid var(--border)'
           }}>
             <div style={{ fontSize: '48px', fontWeight: 800, color: 'var(--accent)', marginBottom: '8px' }}>
-              $4.99
+              {t('premium.price')}
             </div>
             <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '14px' }}>
-              единоразовый платёж • навсегда
+              {t('premium.priceNote')}
             </p>
           </div>
 
@@ -95,12 +97,12 @@ export const CoursesPage = () => {
             marginBottom: '32px'
           }}>
             {[
-              { icon: '⚖️', text: 'Механизмы консенсуса (PoW, PoS)' },
-              { icon: '📜', text: 'Смарт-контракты и Solidity' },
-              { icon: '💎', text: 'DeFi и NFT' },
-              { icon: '🪙', text: 'Tokenomics' },
-              { icon: '🛠️', text: 'Практика: ERC-20 и Uniswap' },
-              { icon: '🧘', text: 'Антистресс-медитация' },
+              { icon: '⚖️', text: t('premium.features.consensus') },
+              { icon: '📜', text: t('premium.features.smartContracts') },
+              { icon: '💎', text: t('premium.features.defi') },
+              { icon: '🪙', text: t('premium.features.tokenomics') },
+              { icon: '🛠️', text: t('premium.features.practice') },
+              { icon: '🧘', text: t('premium.features.meditation') },
             ].map((item, i) => (
               <li key={i} style={{ 
                 display: 'flex', 
@@ -130,11 +132,11 @@ export const CoursesPage = () => {
               boxShadow: '0 4px 16px rgba(245, 158, 11, 0.4)'
             }}
           >
-            💳 Оплатить $4.99
+            {t('premium.pay')}
           </button>
 
           <p style={{ color: 'var(--text-muted)', marginTop: '16px', fontSize: '12px' }}>
-            Безопасная оплата через Telegram
+            {t('premium.secure')}
           </p>
         </div>
       </section>
@@ -144,8 +146,8 @@ export const CoursesPage = () => {
   return (
     <section className="screen">
       <div className="screen-header">
-        <h1>📚 Обучение</h1>
-        <p>Изучайте криптовалюты с нуля</p>
+        <h1>📚 {t('courses.title')}</h1>
+        <p>{t('courses.subtitle')}</p>
       </div>
       
       {basicCourses.map(course => (
@@ -168,7 +170,7 @@ export const CoursesPage = () => {
           textTransform: 'uppercase',
           letterSpacing: '1px'
         }}>
-          💎 Средний уровень
+          💎 {t('courses.premium')}
         </span>
         <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
       </div>

@@ -1,0 +1,140 @@
+{
+  "app": {
+    "loading": "Loading..."
+  },
+  "nav": {
+    "courses": "Courses",
+    "games": "Games",
+    "meditation": "Relax",
+    "profile": "Profile"
+  },
+  "courses": {
+    "title": "Learning",
+    "subtitle": "Learn cryptocurrencies from scratch",
+    "basic": "Basic Level",
+    "premium": "Intermediate Level",
+    "premiumCourse": "Premium course",
+    "modules": "modules • Interactive lessons",
+    "locked": "🔒"
+  },
+  "premium": {
+    "title": "Premium Courses",
+    "subtitle": "Unlock all content",
+    "unlock": "Premium Subscription",
+    "description": "Get access to all intermediate and advanced courses",
+    "price": "$4.99",
+    "priceNote": "one-time payment • forever",
+    "pay": "💳 Pay $4.99",
+    "secure": "Secure payment via Telegram",
+    "features": {
+      "consensus": "Consensus Mechanisms (PoW, PoS)",
+      "smartContracts": "Smart Contracts and Solidity",
+      "defi": "DeFi and NFT",
+      "tokenomics": "Tokenomics",
+      "practice": "Practice: ERC-20 and Uniswap",
+      "meditation": "Anti-stress Meditation"
+    }
+  },
+  "games": {
+    "title": "Mini-games",
+    "subtitle": "Learn and earn points"
+  },
+  "trumpSled": {
+    "title": "Trump Runner",
+    "description": "Space / ↑ — jump. Collect 💰💎, avoid 🐂🐻🚀📉🔥⚡!",
+    "tip": "💡 Space / ↑ — jump. Avoid 🐂🐻💰🚀!",
+    "start": "▶ START",
+    "restart": "🔄 RESTART",
+    "back": "← Back",
+    "jump": "↑ Jump",
+    "gameOver": "GAME OVER",
+    "score": "Score",
+    "record": "Record",
+    "newRecord": "★ NEW RECORD! ★"
+  },
+  "puzzle": {
+    "title": "Puzzle",
+    "description": "Drag pieces to assemble the picture",
+    "moves": "Moves",
+    "done": "Done!",
+    "show": "👁️ Show",
+    "hide": "🙈 Hide",
+    "restart": "🔀 Restart",
+    "collected": "🖼️ Collected",
+    "noCollected": "No collected pictures yet",
+    "back": "← Back to games"
+  },
+  "quiz": {
+    "title": "Quiz",
+    "subtitle": "Test your knowledge",
+    "loading": "Loading...",
+    "noQuestions": "No questions in this test yet",
+    "question": "Question",
+    "from": "of",
+    "correct": "Correct!",
+    "wrong": "Wrong",
+    "finish": "🏁 Finish",
+    "next": "Next →",
+    "perfect": "Excellent!",
+    "good": "Good result!",
+    "tryAgain": "Try again",
+    "correctAnswers": "Correct answers",
+    "restart": "🔄 Try again",
+    "back": "← Back to games"
+  },
+  "meditation": {
+    "title": "Anti-stress",
+    "subtitle": "Regain control of your mind",
+    "locked": {
+      "title": "Premium Content",
+      "description": "Anti-stress meditation for crypto traders: find peace and clarity",
+      "price": "$1.99",
+      "priceNote": "one-time payment",
+      "pay": "💳 Pay $1.99",
+      "features": {
+        "timer": "Unlimited meditation timer",
+        "audio": "Relaxing audio background",
+        "breathing": "Breathing exercises",
+        "tips": "Tips for crypto traders"
+      }
+    },
+    "player": {
+      "title": "Anti-stress Meditation",
+      "description": "For crypto traders tired of market swings who want to find peace",
+      "audioTitle": "Audio Background",
+      "audioDesc": "Relaxing music for meditation",
+      "duration": "Choose duration:",
+      "start": "▶️ Start meditation",
+      "stop": "⏹️ Stop",
+      "breathe": "Breathe deeply... The market can wait 🌍"
+    },
+    "tips": "💡 Tips for traders",
+    "tipTitles": {
+      "breathing": "Breathing",
+      "loss": "Let go of losses",
+      "longTerm": "Long-term view",
+      "mind": "Clear mind"
+    },
+    "tipTexts": {
+      "breathing": "Inhale for 4 seconds, hold for 4, exhale for 6",
+      "loss": "Money will return. FOMO is the trader's enemy",
+      "longTerm": "Crypto grows over years. Don't panic from minute dips",
+      "mind": "Accept uncertainty. Market is not 100% predictable"
+    },
+    "bottomText": "Clear mind = better decisions",
+    "bottomSubtext": "Less stress → less emotional trades → more profit"
+  },
+  "profile": {
+    "title": "Profile",
+    "authTitle": "Authorize in Telegram to save progress",
+    "authDesc": "Log in via Telegram to:",
+    "authBenefits": {
+      "score": "Save points",
+      "progress": "Track progress",
+      "courses": "Complete courses"
+    },
+    "score": "Points",
+    "gamesCompleted": "Games completed"
+  },
+  "language": "Language"
+}

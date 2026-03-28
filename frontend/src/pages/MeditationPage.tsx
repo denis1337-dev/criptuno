@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export const MeditationPage = () => {
+  const { t } = useTranslation();
   const [isMeditating, setIsMeditating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -99,8 +101,8 @@ export const MeditationPage = () => {
     return (
       <section className="screen">
         <div className="screen-header">
-          <h1>🧘 Антистресс</h1>
-          <p>Верните контроль над разумом</p>
+          <h1>🧘 {t('meditation.title')}</h1>
+          <p>{t('meditation.subtitle')}</p>
         </div>
 
         <div className="card" style={{ 
@@ -109,10 +111,9 @@ export const MeditationPage = () => {
           background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1))'
         }}>
           <div style={{ fontSize: '80px', marginBottom: '20px' }}>🔒</div>
-          <h2 style={{ margin: '0 0 12px', fontSize: '24px' }}>Премиум контент</h2>
+          <h2 style={{ margin: '0 0 12px', fontSize: '24px' }}>{t('meditation.locked.title')}</h2>
           <p style={{ color: 'var(--text-secondary)', margin: '0 0 32px', lineHeight: 1.6 }}>
-            Антистресс-медитация для крипто-трейдеров:<br/>
-            обретите покой и ясность ума
+            {t('meditation.locked.description')}
           </p>
           
           <div style={{ 
@@ -123,10 +124,10 @@ export const MeditationPage = () => {
             border: '1px solid var(--border)'
           }}>
             <div style={{ fontSize: '48px', fontWeight: 800, color: 'var(--accent)', marginBottom: '8px' }}>
-              $1.99
+              {t('meditation.locked.price')}
             </div>
             <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '14px' }}>
-              единоразовый платёж
+              {t('meditation.locked.priceNote')}
             </p>
           </div>
 
@@ -138,10 +139,10 @@ export const MeditationPage = () => {
             marginBottom: '32px'
           }}>
             {[
-              { icon: '⏱️', text: 'Таймер медитации без ограничений' },
-              { icon: '🎧', text: 'Расслабляющее аудио сопровождение' },
-              { icon: '🌊', text: 'Дыхательные упражнения' },
-              { icon: '💡', text: 'Советы для крипто-трейдеров' },
+              { icon: '⏱️', text: t('meditation.locked.features.timer') },
+              { icon: '🎧', text: t('meditation.locked.features.audio') },
+              { icon: '🌊', text: t('meditation.locked.features.breathing') },
+              { icon: '💡', text: t('meditation.locked.features.tips') },
             ].map((item, i) => (
               <li key={i} style={{ 
                 display: 'flex', 
@@ -170,12 +171,12 @@ export const MeditationPage = () => {
               background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
               boxShadow: '0 4px 16px rgba(245, 158, 11, 0.4)'
             }}
-          >
-            💳 Оплатить $1.99
+            >
+            {t('meditation.locked.pay')}
           </button>
 
           <p style={{ color: 'var(--text-muted)', marginTop: '16px', fontSize: '12px' }}>
-            Безопасная оплата через Telegram
+            {t('premium.secure')}
           </p>
         </div>
       </section>
@@ -185,7 +186,7 @@ export const MeditationPage = () => {
   return (
     <section className="screen">
       <div className="screen-header">
-        <h1>🧘 Антистресс</h1>
+        <h1>🧘 {t('meditation.title')}</h1>
         <p>Верните контроль над разумом</p>
       </div>
 
@@ -255,9 +256,9 @@ export const MeditationPage = () => {
         ) : (
           <>
             <div style={{ fontSize: '72px', marginBottom: '16px' }}>🧘‍♂️</div>
-            <h2 style={{ margin: '0 0 8px', fontSize: '22px' }}>Антистресс-медитация</h2>
+            <h2 style={{ margin: '0 0 8px', fontSize: '22px' }}>{t('meditation.player.title')}</h2>
             <p style={{ color: 'var(--text-secondary)', margin: '0 0 24px', lineHeight: 1.6 }}>
-              Для крипто-трейдеров, которые устали от скачков рынка и хотят обрести покой
+              {t('meditation.player.description')}
             </p>
             
             <div className="card" style={{ 
@@ -269,8 +270,8 @@ export const MeditationPage = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <span style={{ fontSize: '32px' }}>🎧</span>
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '15px' }}>Аудио сопровождение</h4>
-                  <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '13px' }}>Расслабляющая музыка для медитации</p>
+                  <h4 style={{ margin: 0, fontSize: '15px' }}>{t('meditation.player.audioTitle')}</h4>
+                  <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '13px' }}>{t('meditation.player.audioDesc')}</p>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -308,7 +309,7 @@ export const MeditationPage = () => {
             </div>
             
             <div style={{ marginBottom: '24px' }}>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '12px', fontSize: '14px' }}>Выберите длительность:</p>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '12px', fontSize: '14px' }}>{t('meditation.player.duration')}</p>
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
                 {[60, 180, 300, 600].map((duration) => (
                   <button

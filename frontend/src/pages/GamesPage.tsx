@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../store";
 import { PuzzleCollected, PuzzleLevel, QuizQuestion, QuizTest } from "../types";
 import { completePuzzleLevel, getCollectedPuzzles, getPuzzleLevels, getQuizQuestions, getQuizTests } from "../api";
@@ -548,6 +549,7 @@ const TrumpSledGame = ({
 };
 
 export const GamesPage = () => {
+  const { t } = useTranslation();
   const games = useAppStore((s) => s.games);
   const playGame = useAppStore((s) => s.playGame);
   const [activeGame, setActiveGame] = useState<"menu" | "puzzle" | "quiz" | "trump-sled">("menu");
@@ -939,26 +941,26 @@ export const GamesPage = () => {
   return (
     <section className="screen">
       <div className="screen-header">
-        <h1>🎮 Мини-игры</h1>
-        <p>Учитесь и зарабатывайте очки</p>
+        <h1>🎮 {t('games.title')}</h1>
+        <p>{t('games.subtitle')}</p>
       </div>
       
       <div className="card game-card" onClick={() => setActiveGame("trump-sled")}>
         <h3>🛷 Trump on a Sled</h3>
-        <p>Уклоняйтесь от медведей и собирайте бонусы на санях! Крипто-график ждёт.</p>
+        <p>{t('trumpSled.description')}</p>
         <span className="game-badge badge-medium">⚡ Экшн</span>
         <span className="game-badge badge-medium">🎯 {Math.floor(parseInt(localStorage.getItem("trumpDinoHighScore") ?? "0") / 8)} очков</span>
       </div>
       
       <div className="card game-card" onClick={() => setActiveGame("puzzle")}>
-        <h3>🧩 Пазл</h3>
-        <p>Соберите красивые картинки из пазлов. Проверьте свою внимательность!</p>
+        <h3>🧩 {t('puzzle.title')}</h3>
+        <p>{t('puzzle.description')}</p>
         <span className="game-badge badge-easy">🟢 Лёгкий</span>
       </div>
       
       <div className="card game-card" onClick={() => setActiveGame("quiz")}>
-        <h3>📝 Квиз</h3>
-        <p>Проверьте знания о блокчейне и криптовалютах. Отвечайте на вопросы!</p>
+        <h3>📝 {t('quiz.title')}</h3>
+        <p>{t('quiz.subtitle')}</p>
         <span className="game-badge badge-easy">🟢 Лёгкий</span>
       </div>
     </section>

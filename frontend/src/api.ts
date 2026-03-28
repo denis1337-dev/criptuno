@@ -8,9 +8,10 @@ import {
   QuizQuestion,
   QuizTest
 } from "./types";
-import { getTelegramInitData } from "./telegram";
+import { getTelegramInitData, isTelegramWebApp } from "./telegram";
 
-const API_URL = "";
+const isDev = !import.meta.env.PROD;
+const API_URL = isDev ? "" : "https://criptuno.onrender.com";
 const TOKEN_KEY = "authToken";
 
 const getStoredToken = (): string => {
@@ -46,12 +47,14 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
   return (await response.json()) as T;
 };
 
-export const authWithTelegram = async (): Promise<void> => {
+export const authWithTelegram = async (): Promise<boolean> => {
   const initData = getTelegramInitData();
+  
   if (!initData) {
     authToken = getStoredToken();
-    return;
+    return !!authToken;
   }
+  
   try {
     const data = await request<{ token: string }>("/auth/telegram", {
       method: "POST",
@@ -59,9 +62,16 @@ export const authWithTelegram = async (): Promise<void> => {
     });
     authToken = data.token;
     setStoredToken(data.token);
-  } catch {
+    return true;
+  } catch (e) {
+    console.error("Auth error:", e);
     authToken = getStoredToken();
+    return !!authToken;
   }
+};
+
+export const isAuthorized = (): boolean => {
+  return !!authToken || isTelegramWebApp();
 };
 
 export const getCourses = () => request<Course[]>("/courses");

@@ -1,6 +1,10 @@
 {
   "rewrites": [
     { "source": "/courses", "destination": "https://criptuno.onrender.com/courses" },
+    { "source": "/courses/:id/modules", "destination": "https://criptuno.onrender.com/courses/:id/modules" },
+    { "source": "/courses/:courseId/modules/:moduleId/complete", "destination": "https://criptuno.onrender.com/courses/:courseId/modules/:moduleId/complete" },
+    { "source": "/courses/:id/progress", "destination": "https://criptuno.onrender.com/courses/:id/progress" },
+    { "source": "/courses/:courseId/modules/:moduleId/progress", "destination": "https://criptuno.onrender.com/courses/:courseId/modules/:moduleId/progress" },
     { "source": "/auth", "destination": "https://criptuno.onrender.com/auth" },
     { "source": "/auth/telegram", "destination": "https://criptuno.onrender.com/auth/telegram" },
     { "source": "/games", "destination": "https://criptuno.onrender.com/games" },

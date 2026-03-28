@@ -1,6 +1,8 @@
 import {
   Course,
   CourseModule,
+  CourseProgress,
+  ModuleProgress,
   Game,
   Profile,
   PuzzleCollected,
@@ -76,6 +78,11 @@ export const isAuthorized = (): boolean => {
 
 export const getCourses = () => request<Course[]>("/courses");
 export const getCourseModules = (courseId: number) => request<CourseModule[]>(`/courses/${courseId}/modules`);
+export const getCourseProgress = (courseId: number) => request<CourseProgress>(`/courses/${courseId}/progress`);
+export const completeModule = (courseId: number, moduleId: number) => 
+  request<CourseProgress>(`/courses/${courseId}/modules/${moduleId}/complete`, { method: "POST" });
+export const getModuleProgress = (courseId: number, moduleId: number) => 
+  request<ModuleProgress>(`/courses/${courseId}/modules/${moduleId}/progress`);
 export const getGames = () => request<Game[]>("/games");
 export const getPuzzleLevels = () => request<PuzzleLevel[]>("/puzzle-levels");
 export const getCollectedPuzzles = (sessionKey: string) =>

@@ -13,6 +13,16 @@ export type CourseModule = {
   orderIndex: number;
 };
 
+export type CourseProgress = {
+  completedModules: number;
+  totalModules: number;
+  isCompleted: boolean;
+};
+
+export type ModuleProgress = {
+  isCompleted: boolean;
+};
+
 export type Game = {
   id: number;
   slug: string;

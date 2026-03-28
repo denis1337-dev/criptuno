@@ -152,6 +152,23 @@
         border-color: var(--success);
         color: white;
       }
+      .complete-btn {
+        margin-top: 20px;
+        width: 100%;
+        padding: 14px 20px;
+        border-radius: 12px;
+        border: none;
+        background: var(--primary);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .complete-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
     </style>
   </head>
   <body>
@@ -186,12 +203,42 @@
     </nav>
 
     <script>
-      const API_URL = "";
+      const isLocalhost = window.location.hostname === 'localhost';
+      const API_URL = isLocalhost ? "" : "https://criptuno.onrender.com";
       let completedModules = new Set();
-      
+      let courseId = null;
+
+      async function getAuthHeader() {
+        const token = localStorage.getItem('authToken');
+        return token ? { 'Authorization': 'Bearer ' + token } : {};
+      }
+
+      async function saveProgress(moduleIndex) {
+        if (!courseId) return;
+        
+        const modules = document.querySelectorAll('.module-card');
+        const module = modules[moduleIndex];
+        const moduleId = module.dataset.moduleId;
+        
+        try {
+          const headers = await getAuthHeader();
+          headers['Content-Type'] = 'application/json';
+          
+          await fetch(API_URL + '/courses/' + courseId + '/modules/' + moduleId + '/complete', {
+            method: 'POST',
+            headers
+          });
+          
+          completedModules.add(moduleIndex);
+          updateProgressUI();
+        } catch (e) {
+          console.log('Progress save failed:', e);
+        }
+      }
+
       async function loadCourse() {
         const params = new URLSearchParams(window.location.search);
-        const courseId = params.get("course");
+        courseId = params.get("course");
         const titleEl = document.getElementById("course-title");
         const modulesEl = document.getElementById("course-modules");
         const progressBar = document.getElementById("progress-bar");
@@ -202,13 +249,17 @@
         }
 
         try {
-          const [coursesRes, modulesRes] = await Promise.all([
+          const headers = await getAuthHeader();
+          
+          const [coursesRes, modulesRes, progressRes] = await Promise.all([
             fetch(API_URL + "/courses"),
-            fetch(API_URL + "/courses/" + courseId + "/modules")
+            fetch(API_URL + "/courses/" + courseId + "/modules"),
+            fetch(API_URL + "/courses/" + courseId + "/progress", { headers }).catch(() => ({ json: () => null }))
           ]);
 
           const courses = await coursesRes.json();
           const modules = await modulesRes.json();
+          const progress = progressRes.json ? await progressRes.json() : null;
           
           const course = courses.find(c => c.id === parseInt(courseId));
           
@@ -235,8 +286,19 @@
           });
 
           modulesEl.innerHTML = modules.map((module, index) => 
-            '<div class="module-card" id="module-' + index + '">' + module.content + '</div>'
+            '<div class="module-card" data-module-id="' + module.id + '" id="module-' + index + '">' + 
+            module.content + 
+            '<button class="complete-btn" onclick="saveProgress(' + index + ')">✓ Отметить пройденным</button>' +
+            '</div>'
           ).join('');
+
+          if (progress && progress.completedModules) {
+            for (let i = 0; i < progress.completedModules; i++) {
+              completedModules.add(i);
+            }
+          }
+          
+          updateProgressUI();
 
           const cards = modulesEl.querySelectorAll('.module-card');
           
@@ -246,7 +308,66 @@
                 const index = Array.from(cards).indexOf(entry.target);
                 dots.forEach((d, i) => {
                   d.classList.remove('active', 'completed');
-                  if (i < index) {
+                  if (completedModules.has(i)) {
+                    d.classList.add('completed');
+                    d.innerHTML = '✓';
+                  } else if (i < index) {
+                    d.classList.add('completed');
+                    d.innerHTML = '✓';
+                  } else if (i === index) {
+                    d.classList.add('active');
+                    d.innerHTML = i + 1;
+                  } else {
+                    d.innerHTML = i + 1;
+                  }
+                });
+              }
+            });
+          }, { threshold: 0.3 });
+
+          cards.forEach(card => observer.observe(card));
+
+
+        } catch (error) {
+          console.error('Error loading course:', error);
+          titleEl.textContent = "Ошибка загрузки";
+          modulesEl.innerHTML = "<p style='color:var(--error);'>Не удалось загрузить курс.</p>";
+        }
+      }
+
+      function updateProgressUI() {
+        const dots = document.querySelectorAll('.progress-dot');
+        const cards = document.querySelectorAll('.module-card');
+        
+        dots.forEach((dot, i) => {
+          if (completedModules.has(i)) {
+            dot.classList.add('completed');
+            dot.innerHTML = '✓';
+            const btn = cards[i]?.querySelector('.complete-btn');
+            if (btn) {
+              btn.textContent = '✓ Пройдено';
+              btn.style.background = 'var(--success)';
+            }
+          }
+        });
+      }
+
+      document.addEventListener('click', function(e) {
+        var target = e.target || e.srcElement;
+        if (target.classList.contains('complete-btn')) {
+          return;
+        }
+        var link = target.closest ? target.closest('a') : null;
+        if (link) {
+          var href = link.getAttribute('href');
+          if (href && (href.indexOf('http') === 0 || href.indexOf('https') === 0)) {
+            e.preventDefault();
+            window.open(href, '_blank', 'noopener,noreferrer');
+          }
+        }
+      });
+
+      loadCourse();
                     d.classList.add('completed');
                     d.innerHTML = '✓';
                   } else if (i === index) {

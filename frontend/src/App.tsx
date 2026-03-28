@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "./store";
 import { CoursesPage } from "./pages/CoursesPage";
 import { GamesPage } from "./pages/GamesPage";
@@ -6,6 +7,7 @@ import { MeditationPage } from "./pages/MeditationPage";
 import { ProfilePage } from "./pages/ProfilePage";
 
 export const App = () => {
+  const { t } = useTranslation();
   const activeTab = useAppStore((s) => s.activeTab);
   const bootstrap = useAppStore((s) => s.bootstrap);
   const loading = useAppStore((s) => s.loading);
@@ -16,7 +18,7 @@ export const App = () => {
 
   return (
     <main className="app">
-      {loading ? <p>Загрузка...</p> : null}
+      {loading ? <p>{t('app.loading')}</p> : null}
       {activeTab === "courses" ? <CoursesPage /> : null}
       {activeTab === "games" ? <GamesPage /> : null}
       {activeTab === "meditation" ? <MeditationPage /> : null}
@@ -27,25 +29,26 @@ export const App = () => {
 };
 
 const BottomNav = () => {
+  const { t } = useTranslation();
   const activeTab = useAppStore((s) => s.activeTab);
   const setTab = useAppStore((s) => s.setTab);
   return (
     <nav className="bottom-nav">
       <button className={activeTab === "courses" ? "active" : ""} onClick={() => setTab("courses")}>
         <span className="nav-icon">📚</span>
-        <span>Курсы</span>
+        <span>{t('nav.courses')}</span>
       </button>
       <button className={activeTab === "games" ? "active" : ""} onClick={() => setTab("games")}>
         <span className="nav-icon">🎮</span>
-        <span>Игры</span>
+        <span>{t('nav.games')}</span>
       </button>
       <button className={activeTab === "meditation" ? "active" : ""} onClick={() => setTab("meditation")}>
         <span className="nav-icon">🧘</span>
-        <span>Антистресс</span>
+        <span>{t('nav.meditation')}</span>
       </button>
       <button className={activeTab === "profile" ? "active" : ""} onClick={() => setTab("profile")}>
         <span className="nav-icon">👤</span>
-        <span>Профиль</span>
+        <span>{t('nav.profile')}</span>
       </button>
     </nav>
   );

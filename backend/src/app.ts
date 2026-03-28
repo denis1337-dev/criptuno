@@ -22,7 +22,7 @@ export const buildApp = () => {
 
   const isProduction = process.env.NODE_ENV === "production";
   const corsOrigin = isProduction 
-    ? true 
+    ? ["https://criptuno.vercel.app", "https://criptuno-git-master.vercel.app", "https://criptuno-git-курсы.vercel.app"]
     : config.frontendOrigin;
   
   app.register(cors, { origin: corsOrigin, credentials: true });

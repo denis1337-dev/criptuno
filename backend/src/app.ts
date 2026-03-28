@@ -13,7 +13,12 @@ import { quizTestsRoutes } from "./routes/quiz-tests.js";
 export const buildApp = () => {
   const app = Fastify({ logger: true });
 
-  app.register(cors, { origin: config.frontendOrigin, credentials: true });
+  const isProduction = process.env.NODE_ENV === "production";
+  const corsOrigin = isProduction 
+    ? true 
+    : config.frontendOrigin;
+  
+  app.register(cors, { origin: corsOrigin, credentials: true });
   app.register(rateLimit, { max: 100, timeWindow: "1 minute" });
   app.register(jwt, { secret: config.jwtSecret });
 

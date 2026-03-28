@@ -10,7 +10,7 @@ import {
 } from "./types";
 import { getTelegramInitData } from "./telegram";
 
-const API_URL = import.meta.env.VITE_API_URL ?? "https://criptuno.onrender.com";
+const API_URL = "https://criptuno.onrender.com";
 let authToken = "";
 
 const request = async <T>(path: string, init?: RequestInit): Promise<T> => {

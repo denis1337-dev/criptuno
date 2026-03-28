@@ -10,8 +10,8 @@ import {
 } from "./types";
 import { getTelegramInitData, isTelegramWebApp } from "./telegram";
 
-const isDev = !import.meta.env.PROD;
-const API_URL = isDev ? "" : "https://criptuno.onrender.com";
+const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+const API_URL = isLocalhost ? "" : "https://criptuno.onrender.com";
 const TOKEN_KEY = "authToken";
 
 const getStoredToken = (): string => {

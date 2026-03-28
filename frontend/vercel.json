@@ -1,11 +1,10 @@
 {
   "rewrites": [
-    { "source": "/courses/:path*", "destination": "https://criptuno.onrender.com/courses/:path*" },
-    { "source": "/auth/:path*", "destination": "https://criptuno.onrender.com/auth/:path*" },
-    { "source": "/games/:path*", "destination": "https://criptuno.onrender.com/games/:path*" },
-    { "source": "/profile/:path*", "destination": "https://criptuno.onrender.com/profile/:path*" },
-    { "source": "/quiz-tests/:path*", "destination": "https://criptuno.onrender.com/quiz-tests/:path*" },
-    { "source": "/puzzle-levels/:path*", "destination": "https://criptuno.onrender.com/puzzle-levels/:path*" },
-    { "source": "/puzzle-collected", "destination": "https://criptuno.onrender.com/puzzle-collected" }
+    { "source": "/courses", "destination": "https://criptuno.onrender.com/courses" },
+    { "source": "/auth/telegram", "destination": "https://criptuno.onrender.com/auth/telegram" },
+    { "source": "/games", "destination": "https://criptuno.onrender.com/games" },
+    { "source": "/profile/me", "destination": "https://criptuno.onrender.com/profile/me" },
+    { "source": "/quiz-tests", "destination": "https://criptuno.onrender.com/quiz-tests" },
+    { "source": "/puzzle-levels", "destination": "https://criptuno.onrender.com/puzzle-levels" }
   ]
 }

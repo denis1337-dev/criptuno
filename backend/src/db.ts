@@ -6,6 +6,9 @@ export const pool = new Pool({
 });
 
 export const migrate = async (): Promise<void> => {
+  await pool.query(`DROP TABLE IF EXISTS course_modules CASCADE`);
+  await pool.query(`DROP TABLE IF EXISTS courses CASCADE`);
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
@@ -96,8 +99,6 @@ export const migrate = async (): Promise<void> => {
     );
   `);
 
-  await pool.query(`DELETE FROM course_modules`);
-  await pool.query(`DELETE FROM courses`);
   await pool.query(`DELETE FROM quiz_questions`);
   await pool.query(`DELETE FROM quiz_tests`);
   await pool.query(`DELETE FROM puzzle_levels`);

@@ -1,4 +1,6 @@
 import {
+  Course,
+  CourseDetail,
   Game,
   Profile,
   PuzzleCollected,
@@ -72,7 +74,9 @@ import { getTelegramInitData, isTelegramWebApp } from "./telegram";
    return !!authToken || isTelegramWebApp();
  };
  
- export const getGames = () => request<Game[]>("/games");
+  export const getCourses = () => request<Course[]>("/courses");
+  export const getCourseModules = (courseId: number) => request<CourseDetail>(`/courses/${courseId}/modules`);
+  export const getGames = () => request<Game[]>("/games");
  export const getPuzzleLevels = () => request<PuzzleLevel[]>("/puzzle-levels");
  export const getCollectedPuzzles = (sessionKey: string) =>
    request<PuzzleCollected[]>(`/puzzle-collected?sessionKey=${encodeURIComponent(sessionKey)}`);

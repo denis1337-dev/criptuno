@@ -4,6 +4,7 @@ import rateLimit from "@fastify/rate-limit";
 import Fastify from "fastify";
 import { config } from "./config.js";
 import { authRoutes } from "./routes/auth.js";
+import { coursesRoutes } from "./routes/courses.js";
 import { gamesRoutes } from "./routes/games.js";
 import { profileRoutes } from "./routes/profile.js";
 import { puzzleRoutes } from "./routes/puzzle.js";
@@ -33,12 +34,13 @@ import { quizTestsRoutes } from "./routes/quiz-tests.js";
      }
    });
  
-   app.get("/health", async () => ({ ok: true }));
-   app.register(authRoutes);
-   app.register(gamesRoutes);
-   app.register(quizTestsRoutes);
-   app.register(puzzleRoutes);
-   app.register(profileRoutes);
+    app.get("/health", async () => ({ ok: true }));
+    app.register(authRoutes);
+    app.register(coursesRoutes);
+    app.register(gamesRoutes);
+    app.register(quizTestsRoutes);
+    app.register(puzzleRoutes);
+    app.register(profileRoutes);
 
   return app;
 };

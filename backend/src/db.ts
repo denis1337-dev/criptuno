@@ -77,8 +77,27 @@ export const migrate = async (): Promise<void> => {
       completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       UNIQUE (session_key, level_id)
     );
+
+    CREATE TABLE IF NOT EXISTS courses (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      difficulty TEXT NOT NULL CHECK (difficulty IN ('easy', 'medium', 'hard')),
+      order_index INT NOT NULL,
+      is_active BOOLEAN NOT NULL DEFAULT TRUE
+    );
+
+    CREATE TABLE IF NOT EXISTS course_modules (
+      id SERIAL PRIMARY KEY,
+      course_id INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL DEFAULT '',
+      order_index INT NOT NULL,
+      is_active BOOLEAN NOT NULL DEFAULT TRUE
+    );
   `);
 
+  await pool.query(`DELETE FROM course_modules`);
+  await pool.query(`DELETE FROM courses`);
   await pool.query(`DELETE FROM quiz_questions`);
   await pool.query(`DELETE FROM quiz_tests`);
   await pool.query(`DELETE FROM puzzle_levels`);
@@ -90,6 +109,34 @@ export const migrate = async (): Promise<void> => {
       ('quick-math', 'Quick Math', 'medium', TRUE)
     ON CONFLICT DO NOTHING
   `);
+
+  await pool.query(`
+    INSERT INTO courses (title, difficulty, order_index, is_active)
+    VALUES
+      ('Что такое блокчейн', 'easy', 1, TRUE),
+      ('Криптовалюты: Bitcoin и Ethereum', 'easy', 2, TRUE),
+      ('Кошельки и транзакции', 'easy', 3, TRUE),
+      ('Криптография', 'medium', 4, TRUE),
+      ('Консенсус: PoW, PoS', 'medium', 5, TRUE),
+      ('Смарт-контракты', 'medium', 6, TRUE),
+      ('DeFi', 'hard', 7, TRUE),
+      ('NFT и токены', 'hard', 8, TRUE),
+      ('Tokenomics', 'hard', 9, TRUE)
+  `);
+
+  const coursesResult = await pool.query<{ id: number; title: string }>(
+    `SELECT id, title FROM courses ORDER BY order_index`
+  );
+
+  for (const course of coursesResult.rows) {
+    const moduleCount = 3;
+    for (let i = 1; i <= moduleCount; i++) {
+      await pool.query(
+        `INSERT INTO course_modules (course_id, title, content, order_index, is_active) VALUES ($1, $2, '', $3, TRUE)`,
+        [course.id, `Модуль ${i}`, i]
+      );
+    }
+  }
 
   await pool.query(`
     INSERT INTO quiz_tests (title, order_index, is_active)

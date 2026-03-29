@@ -35,9 +35,29 @@ export type Game = {
    orderIndex: number;
  };
  
- export type PuzzleCollected = {
-   levelId: number;
-   levelTitle: string;
-   imageUrl: string;
-   completedAt: string;
- };
+export type PuzzleCollected = {
+  levelId: number;
+  levelTitle: string;
+  imageUrl: string;
+  completedAt: string;
+};
+
+export type Course = {
+  id: number;
+  title: string;
+  difficulty: "easy" | "medium" | "hard";
+  orderIndex: number;
+};
+
+export type CourseModule = {
+  id: number;
+  courseId: number;
+  title: string;
+  content: string;
+  orderIndex: number;
+};
+
+export type CourseDetail = {
+  course: Course;
+  modules: CourseModule[];
+};

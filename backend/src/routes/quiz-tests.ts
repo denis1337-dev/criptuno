@@ -9,7 +9,6 @@ export const quizTestsRoutes = async (app: FastifyInstance): Promise<void> => {
         SELECT
           id,
           title,
-          course_id AS "courseId",
           order_index AS "orderIndex"
         FROM quiz_tests
         WHERE is_active = TRUE

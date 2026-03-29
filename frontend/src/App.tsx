@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "./store";
-import { CoursesPage } from "./pages/CoursesPage";
 import { GamesPage } from "./pages/GamesPage";
 import { MeditationPage } from "./pages/MeditationPage";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -19,7 +18,6 @@ export const App = () => {
   return (
     <main className="app">
       {loading ? <p>{t('app.loading')}</p> : null}
-      {activeTab === "courses" ? <CoursesPage /> : null}
       {activeTab === "games" ? <GamesPage /> : null}
       {activeTab === "meditation" ? <MeditationPage /> : null}
       {activeTab === "profile" ? <ProfilePage /> : null}
@@ -34,10 +32,6 @@ const BottomNav = () => {
   const setTab = useAppStore((s) => s.setTab);
   return (
     <nav className="bottom-nav">
-      <button className={activeTab === "courses" ? "active" : ""} onClick={() => setTab("courses")}>
-        <span className="nav-icon">📚</span>
-        <span>{t('nav.courses')}</span>
-      </button>
       <button className={activeTab === "games" ? "active" : ""} onClick={() => setTab("games")}>
         <span className="nav-icon">🎮</span>
         <span>{t('nav.games')}</span>
